@@ -10,6 +10,11 @@ let direction = {
 
 let fireCounter = 0;
 
+let gravity = 1;
+ let theX = 400;
+ let theX2 = window.innerWidth;
+ let theY =  310;
+ let theY2 = 390;
 ///////////////////////////////////////////////////////////////////
 const movingLeft = () =>{
 	console.log("moving left");
@@ -63,7 +68,7 @@ window.addEventListener("resize", resizer)
 
 
 
-let player = class ThePlayer {
+class ThePlayer {
 	constructor(x, y, dx, dy, health, ammo, win){
 		this.x = x;
 		this.y = y;
@@ -75,54 +80,85 @@ let player = class ThePlayer {
 		this.win = win;
 	}
 	 animating (){
-       requestAnimationFrame(animating);
-       c.clearRect(0, 0, innerWidth, innerHeight);
- 
-       if(direction.right == true){
-     	theX--;
- 	    theX2++;
+		
+		 if (direction.right == true && direction.up == true && theY < 390 - 80){
+			 theX--;
+			 theX2++;
+			theY -= 3;
+			 theY2 += 3;
+	   }
+       else if(direction.right == true && theX > 115 ){
+     	 theX--;
+ 	     theX2++;
  }
-       if(direction.left == true){
-     	theX++;
-     	theX2--;
+		 else if (direction.right && direction.up == false && theY < 390 - 80){
+			if(theX > 76) {
+			theX--;
+			 theX2++;
+			 theY += gravity;
+			 theY2 -= gravity;
+		 }
+	   }
+		 else if (direction.left == true){
+     	 theX++;
+     	 theX2--;
  } 
- if(direction.down == true){	
- 	theY++;
- 	theY2--;
+		 else if (direction.down == true && theY < 390 - 80){	
+ 	     theY++;
+ 	     theY2--;
  }
-if(direction.up == true){
- 	theY-= 3;
- 	theY2--;
-  while(direction.up == false && theY < 390 + 40){
- theY+= gravity;
+		 else if (direction.up == true){
+ 	     theY-= 3;
+		  theY2+=3;
+	   }
+       else if(direction.up == false && theY < 390 - 80){
+		 theY+= gravity;
+		 theY2 -= gravity;
 
-}
+
 }
  else{
  	theX += 0;
  	theX2 += 0;
  }
 
+ //player
 c.fillStyle = '#00FF0F';
 c.fillRect(75, theY, 40, 80)
+
 c.fillStyle ='#FF0000';
-c.fillRect(theX, 350, 40, 40);
+c.fillRect(theX, theY2 - 40, 40, 40);
 c.beginPath();
-c.moveTo(0, 390);
-c.lineTo( theX2, 390);
+c.moveTo(0, theY2);
+c.lineTo( theX2, theY2);
 c.strokeStyle = "blue";
 c.stroke();
 	 }
 	}
-	let first = new player(3,3,3,3,3,3,false)
 
+	let first;
+	const init  = () => {
+	first = new ThePlayer(3,3,3,3,3,3,false)
 	first.animating();
 
+	}
+
+	const animation = () =>{
+		requestAnimationFrame(animation);
+	   c.clearRect(0, 0, innerWidth, innerHeight);
+	   first.animating();
+	}
+init();
+animation();
 
 
 
+function getDistance (x1, y1, x2, y2){
+	let xDistance = x1 - x2;
+	let yDistance = y1 - y2;
 
-
+	return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+}
 
 
 
@@ -184,11 +220,6 @@ fireCounter = 0;
 
 
 
- let gravity = 1;
- let theX = 400;
- let theX2 = window.innerWidth;
- let theY =  310;
-;
 
 
 
