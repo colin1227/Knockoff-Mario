@@ -4,7 +4,10 @@ let direction = {
 	left: false,
 	right: false,
 	up: false,
-	down: false
+	down: false,
+	collisionHorizontal: false,
+	colisionUp: false,
+	colisionDown: false
 }
 
 
@@ -62,21 +65,99 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 window.addEventListener("resize", resizer)
-
+////////////////////////////////////////////////////////////////////////////////
 class Ground{
 	constructor(x, y){
 		this.x = x;
 		this.y = y;
 	}
+	theGround(groundx, groundy) {
+		c.beginPath();
+		c.moveTo(0, tutG.y);
+		c.lineTo(groundx, groundy);
+		c.strokeStyle = "blue";
+		c.stroke();
+	}
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 class Block {
 	constructor(x,y,width,height){
 		this.x = x;
 		this.y = y;
 		this.width = width;
-		this.height = height
+		this.height = height;
+		this.left = x;
+		this.right = x + width;
+		this.top = height;
+
+	}
+	theEnemies(abx, aby, abw, abh) {
+		c.fillStyle = '#FF0000';
+		c.fillRect(abx, aby, abw, abh);
+	}
+	moving() {
+
+		if (direction.right == true && direction.up == true && xDistance < 0) {
+			this.x-= first.dx;
+			//tutG.x-= first.dx;
+			this.y += 3;
+			//tutG.y += 3;
+		}
+		else if (direction.right == true && xDistance < 0) {
+			this.x -= first.dx;
+			//tutG.x += first.dx;
+		}
+		else if (direction.right == true && xDistance <= 0) {
+			this.x += 0;
+			if(direction.right == true && yDistance < 0){
+				this.x += first.dx;
+			}
+			//tutG.x += first.dx;
+		}
+
+		else if (direction.right && direction.up == false && this.y < 390 - 80) {
+			if (this.x > 76) {
+				this.x--;
+			//	tutG.x++;
+				this.y -= gravity;
+			//	tutG.y -= gravity * 2;
+			}
+		}
+		else if (direction.left == true) {
+			this.x += first.dx;
+			//tutG.x += first.dx;
+		}
+		else if (direction.down == true) {
+			this.y--;
+			//tutG.y--;
+		}
+		else if (direction.up == true) {
+			this.y += 3;
+		//	tutG.y += 3;
+		}
+		// if(xDistance == 0 && yDistance> 0){
+		// 	this.x -= first.dx;
+		// 	tutG.x += first.dx;
+		// }
+
+		else {
+			// aBlock.y-= gravity;
+			if (this.y > 390 - 38) {
+				this.y -= gravity;
+				this.y -= gravity;
+			}
+			this.x += 0;
+		//	tutG.x += 0;
+		}
 	}
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 
 
 class ThePlayer {
@@ -92,88 +173,71 @@ class ThePlayer {
 		this.ammo = ammo;
 		this.win = win;
 	}
-	 animating (){
-		
-		 if (direction.right == true && direction.up == true && aBlock.y < 390 - 80){
-			 aBlock.x--;
-			 tutG.x++;
-			theY -= 3;
-			 tutG.y += 3;
-	   }
-       else if(direction.right == true && aBlock.x > 115 ){
-     	 aBlock.x-= first.dx;
- 	     tutG.x-= first.dx;
- }
-		 else if (direction.right && direction.up == false && aBlock.y < 390 - 80){
-			if(theX > 76) {
-			aBlock.x--;
-			 tutG.x++;
-			 theY += gravity;
-			 tutG.y -= gravity;
-		 }
-	   }
-		 else if (direction.left == true){
-     	 aBlock.x++;
-     	 tutG.x--;
- } 
-		 else if (direction.down == true && aBlock.y > 390 - 80){	
- 	     aBlock.y--;
- 	     tutG.y--;
- }
-		 else if (direction.up == true){
- 	     aBlock.y+= 3;
-		  tutG.y+=3;
-	   }
-       else {
-		// aBlock.y-= gravity;
-		if (aBlock.y > 390 - 40){
-		 aBlock.y-= gravity;
-		 tutG.y -= gravity;
-			 }
-		  aBlock.x += 0;
-		  tutG.x += 0;
-	 }
 
- //player
+ //visual player
+  thePlayer (firstx,firsty,firstW , firstH){
 c.fillStyle = '#00FF0F';
-c.fillRect(first.x, first.y, 40, 80)
+c.fillRect(firstx, firsty, firstW, firstH)
+ 
+     }
+}
 
-c.fillStyle ='#FF0000';
-c.fillRect(aBlock.x, aBlock.y, aBlock.width, aBlock.height);
-c.beginPath();
-c.moveTo(0, tutG.y);
-c.lineTo( tutG.x, tutG.y);
-c.strokeStyle = "blue";
-c.stroke();
-	 }
-	}
 	let first;
-    let aBlock;
-    let tutG;
+	let aBlock;
+	let a2Block;
+	let tutG;
+	let allEnemies = [];
 	const init  = () => {
 	    first = new ThePlayer(75,310,40,80,5,3,3,3,false);
-        aBlock = new Block(400, 350, 40, 40);
+		aBlock = new Block(400, 350, 40, 40);
+		a2Block = new Block(600, 350, 40, 40);
         tutG = new Ground(window.innerWidth, 390);
-	    first.animating();
+		allEnemies.push(aBlock)
+		allEnemies.push(a2Block)
+		//first.moving();
 
 	}
 
+//////////////////////////////////////////////////////////////////////////////////
+let yDistance;
+let xDistance;
+let getDistance = (x1, y1, x2, y2) => {
+	xDistance = (x1 + 40) - x2;
+	yDistance = (y1 + 80) - y2;
+
+    let total = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+    console.log(yDistance);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
 	const animation = () =>{
 		requestAnimationFrame(animation);
 	   c.clearRect(0, 0, innerWidth, innerHeight);
-	   first.animating();
+	    first.thePlayer(first.x,first.y,first.width,first.height);
+	   aBlock.theEnemies(aBlock.x, aBlock.y, aBlock.width, aBlock.height);
+		a2Block.theEnemies(a2Block.x, a2Block.y, a2Block.width, a2Block.height);
+		tutG.theGround(tutG.x,tutG.y);
+		aBlock.moving();
+		a2Block.moving();
+	//	first.moving();
+	     for(let i = 0; i < allEnemies.length; i++){
+			 if(allEnemies[i].x + first.width + 1 < first.x){
+			   getDistance(first.x, first.y, allEnemies[i].x, allEnemies[i].y);
+
+			 }
+             else{
+		       getDistance(first.x, first.y,allEnemies[i].x,allEnemies[i].y);
+		       i++;
+			 }
+		 }
 	}
 init();
 animation();
 
 
 
-function getDistance (x1, y1, x2, y2){
-	let xDistance = x1 - x2;
-	let yDistance = y1 - y2;
 
-	return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
-}
 
 //i did it
 
@@ -244,8 +308,3 @@ fireCounter = 0;
 
 
 
-
-// let theX = 400;
-//let theX2 = window.innerWidth;
-// let theY = 310;
-//let theY2 = 390;
