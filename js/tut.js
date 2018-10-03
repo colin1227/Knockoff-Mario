@@ -222,7 +222,10 @@ class ThePlayer {
 		}
 
 
-		else if (direction.right == true && mapCollision.bottomCol === true) {
+		else if (direction.right == true && mapCollision.bottomCol === true && mapCollision.leftCol === false) {
+			if (mapCollision.rightCol === true) {
+				mapCollision.rightCol = false;
+			}
 			this.x+= this.dx;
 			trans= this.dx;
 			this.rightX += this.dx;
@@ -236,27 +239,38 @@ class ThePlayer {
 			// c.setTransform(0, 0, 0, 0, trans, 0)
 			//tutG.x += first.dx;
 		}
-		else if (direction.left == true && mapCollision.bottomCol === true) {
+		else if (direction.left === true && mapCollision.rightCol == true && mapCollision.bottomCol === true) {
+			this.x += 0;
+		}
+		else if (direction.left == true && mapCollision.bottomCol === true && mapCollision.rightCol === false) {
 			if(mapCollision.leftCol === true){
 				mapCollision.leftCol = false;
 			}
+			this.leftX -= this.dx;
 			this.x -= this.dx;
 			trans = -this.dx;
-			this.rightY[0] -= this.dx
-			this.rightY[1] -= this.dx;
+            this.rightX -= this.dx;
 			c.translate(-trans, 0);
 			//tutG.x += first.dx;
 		}
 		else if (direction.down == true && mapCollision.bottomCol === true) {
 			this.y += first.dy;
-		
+			this.rightY[0] += first.dy;
+			this.rightY[1] += first.dy;
+			//console.log(this.rightY[0])
+			this.leftY[0] += first.dy;
+			this.leftY[1] += first.dy;
 			//tutG.y--;
 		}
 		else if (direction.up == true && mapCollision.bottomCol === true) {
 			this.y -= first.dy;
 			this.y += gravity;
 			this.jump = true;
-
+			this.rightY[0] -= first.dy;
+			this.rightY[1] -= first.dy;
+			//console.log(this.rightY[0])
+			this.leftY[0] -= first.dy;
+			this.leftY[1] -= first.dy;
 			//	tutG.y += 3;
 		}
 		else if(direction.up == true && mapCollision.bottomCol === false && jump === true){
@@ -271,7 +285,12 @@ class ThePlayer {
 			// aBlock.y-= gravity;
 			if (this.y < 310) {
 				this.y += gravity;
-				this.y += gravity;
+				this.rightY[0] = this.y;
+				this.rightY[1] = this.y + this.height;
+				console.log(this.rightY[0])
+				this.leftY[0] = this.y;
+				this.leftY[1] = this.y + this.height;
+
 			}
 
 			//	tutG.x += 0;
@@ -314,29 +333,86 @@ const game = {
 	colDetObjLeft(RightX, RightY, LeftX, LeftY){
 		// console.log('RightX', RightX)
 		// console.log('LeftX', LeftX)
-		if(RightX == LeftX){	
-			
-		 
-		for(let r = 0; r < RightY[1] + 1; r++){
-			if (RightY[0] -1 < r < RightY[1]){
-				if(r - LeftY[0] >= 0 || r - LeftY[1] <= 0){
-					mapCollision.leftCol = true;
-					console.log("made it to here");
-					
-					
+		if(RightX === LeftX){	
+	
+			if (((RightY[1] >= LeftY[0] && RightY[1] <= LeftY[1]) && (RightY[0] <= LeftY[0] && RightY[0] <= LeftY[1])) || ((RightY[1] >= LeftY[0] && RightY[1] >= LeftY[1]) && (RightY[0] >= LeftY[0] && RightY[0] <= LeftY[1]))){
+				// console.log("Ry[1] - Ly[0]", RightY[1] - LeftY[0])
+				// console.log("Ry[0] - Ly[1]",RightY[0] - LeftY[1])
+				// console.log("Ry[0] - Ly[0]",RightY[0] - LeftY[0])
+				// console.log("Ry[1] - Ly[1]",RightY[0] - LeftY[1])
+				
+				mapCollision.leftCol = true;
+		
+		
+				return;
 				}
-				else{
-					mapCollision.leftCol = false;
-					
-				}
-			
-		}
+			else if (RightY[1] > LeftY[0] && RightY[1] > LeftY[1]){
+				mapCollision.leftCol = false;
+				console.log("positive answer: 1 under block #2")
+			}
+			else if (RightY[0] < LeftY[0] && RightY[0] < LeftY[1]){
+				mapCollision.leftCol = false;
+				console.log("negative answer: 0 above block #1")
+			}
+			else if (RightY[1] < LeftY[0] && RightY[1] < LeftY[1]){
+				mapCollision.leftCol = false;
+				console.log("negative answer: 1 above block #3")
+			}
+			else if (RightY[0] > LeftY[0] && RightY[0] > LeftY[1]){
+				mapCollision.leftCol = false;
+				console.log("positive answer: 0 under block #4")
+			}
+
+			else{
+				mapCollision.leftCol = false;
 	}
-		} else {
-			mapCollision.leftCol = false;
-			console.log("false")
 		}
-}
+		
+		else {
+			mapCollision.leftCol = false;
+			//console.log("false")
+		}
+},
+	colDetObjRight(LeftX, LeftY, RightX, RightY) {
+		 console.log('RightX', RightX)
+		 console.log('LeftX', LeftX)
+		if (RightX === LeftX) {
+              console.log("got here")
+			if (((LeftY[0] <= RightY[0] && LeftY[0] <= RightY[1]) && (LeftY[1] >= RightY[0] && LeftY[1] <= RightY[1])) || ((LeftY[0] >= RightY[0] && LeftY[0] <= RightY[1]) && (LeftY[1] >= RightY[0] && LeftY[1] <= RightY[1]))) {
+				// console.log("Ry[1] - Ly[0]", RightY[1] - LeftY[0])
+				// console.log("Ry[0] - Ly[1]",RightY[0] - LeftY[1])
+				// console.log("Ry[0] - Ly[0]",RightY[0] - LeftY[0])
+				// console.log("Ry[1] - Ly[1]",RightY[0] - LeftY[1])
+
+				mapCollision.rightCol = true;
+				return;
+			}
+			// vvv  first and second not actulally doing anything vvvv
+			else if (LeftY[1] > RightY[0] && LeftY[1] > RightY[1]) {
+				mapCollision.righttCol = false;
+				console.log("positive answer: 1 under block #2")
+			}
+			else if (LeftY[0] < RightY[0] && LeftY[0] < RightY[1]) {
+				mapCollision.rightCol = false;
+				console.log("negative answer: 0 above block #1")
+			}
+			else if (LeftY[1] < RightY[0] && LeftY[1] < RightY[1]) {
+				mapCollision.rightCol = false;
+				console.log("negative answer: 1 above block #3")
+			}
+			else if (LeftY[0] > RightY[0] && LeftY[0] > RightY[1]) {
+				mapCollision.rightCol = false;
+				console.log("positive answer: 0 under block #4")
+			}
+			else {
+				mapCollision.rightCol = false;
+			}
+		}
+		else {
+			mapCollision.rightCol = false;
+			//console.log("false")
+		}
+	},
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -371,7 +447,7 @@ const game = {
 		//first.findRight();
 		//aBlock.findRight();
 		
-		
+		game.colDetObjRight(first.leftX, first.leftY, aBlock.rightX, aBlock.rightY)
 		game.colDetObjLeft(first.rightX, first.rightY, aBlock.leftX, aBlock.leftY);
 		first.isCollidingDown(aBlock.y);
 		//console.log(first.rightY)
@@ -428,6 +504,7 @@ $(document).on("keydown", (event) =>{
 		direction.down = true;
 		movingDown();
 	}
+
 // the function call that fires bullets
 	else if(event.keyCode == 32){
 		preventDefault()
