@@ -28,27 +28,27 @@ let tutG;
 let trans;
 let allEnemies = [];
 let fireCounter = 0;
-let gravity = 3;
+let gravity = 1;
 
 ///////////////////////////////////////////////////////////////////
-const movingLeft = () =>{
-	console.log("moving left");
-};
+// const movingLeft = () =>{
+// 	console.log("moving left");
+// };
 
 
-const movingUp = () =>{
-	console.log("moving up");
-};
+// const movingUp = () =>{
+// 	console.log("moving up");
+// };
 
 
-const movingRight = () =>{
-	console.log("moving right");
-};
+// const movingRight = () =>{
+// 	console.log("moving right");
+// };
 
 
-const movingDown = () =>{
-	console.log("moving down");
-};
+// const movingDown = () =>{
+// 	console.log("moving down");
+// };
 ///////////////////////////////////////////////////////////////////
 
 const fire = () => {
@@ -135,7 +135,7 @@ class Block {
 		this.right = x + width;
 		this.topY = this.y;
 		this.topX = [this.x, this.x + this.width];
-		this.bottomY = this.y + 40;
+		this.bottomY = this.y - 80;
 		this.bottomX = [this.x, this.x + this.width];
 		this.leftX = this.x;
 		this.leftY = [this.y, this.y + this.height];
@@ -163,14 +163,14 @@ class Block {
 		}
 	}
 	
-	getDistance(x1, y1, player) {
-	xDistance = (x1 + player) - this.x;
-	yDistance = (y1 + player) - this.y;
+// 	getDistance(x1, y1, player) {
+// 	xDistance = (x1 + player) - this.x;
+// 	yDistance = (y1 + player) - this.y;
 
-	let total = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
-	// console.log(yDistance);
+// 	let total = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+// 	// console.log(yDistance);
 
-}
+// }
 }
 
 
@@ -191,132 +191,108 @@ class ThePlayer {
 		this.height = height;
 		this.dx = dx;
 		this.dy = dy;
-		this.leftX = this.x;
+		this.leftX = this.x; //collison top and bottom
 		this.leftY = [this.y, this.y + this.height];
-		this.rightX = this.x + 40;
+		this.rightX = this.x + 40; //collison top and bottom
 		this.rightY = [this.y, this.y + this.height];
-		this.bottomY = this.y + 40;
-		this.bottomX = [this.x, this.y + this.height];
-		this.topY = this.y;
-		this.topX = [this.x, this.y + this.height];
+		this.bottomY = this.y + 80; //collison top and bottom
+		this.bottomX = [this.x, this.x + this.width]; // same as LeftY and RightY
+		this.topY = this.y; //collison top and bottom
+		this.topX = [this.x, this.x + this.width]; // same as LeftY and RightY
 
         
 		this.health = health;
 		this.ammo = ammo;
 		this.win = win;
 	}
-	moving() {
-
-		if (direction.left == true && direction.up == true && mapCollision.bottomCol === true) {
-			this.x -= first.dx;
-			this.y -= 3;
-			this.y += gravity;
-			
+	moving(groundy) {
 		
-			//tutG.x-= first.dx;
-
-			//tutG.y += 3;
+		if(mapCollision.topCol === false){
+			console.log(mapCollision.topCol)
+			if(this.bottomY < groundy) {
+				this.bottomY += gravity;
+				this.y += gravity;
+				//trans += gravity;
+				c.translate(-trans, 0)
+			}
+			
 		}
-		else if (direction.right === true && mapCollision.leftCol == true && mapCollision.bottomCol === true){
+		// else if (direction.left == true && direction.up == true && mapCollision.topCol === true) {
+		// 	this.x -= this.dx;
+		// 	this.y -=this.dy;
+		// 	this.y += gravity;
+		// }
+		// else if ((direction.right === true && mapCollision.leftCol == true && mapCollision.topCol === true) || (direction.left === true && mapCollision.rightCol == true && mapCollision.topCol === true)|| (direction.down === true && mapCollision.topCol === true)){
+		// 	this.x += 0;
+		// 	this.y += 0;
+		// }
+		else if ((direction.right === true && mapCollision.leftCol == true && mapCollision.topCol === false) || (direction.left === true && mapCollision.rightCol == true && mapCollision.topCol === false) ){
+			this.x += 0;
+			
+
+		}
+		else if (direction.down === true && mapCollision.topCol == true) {
 			this.x += 0;
 		}
-
-
-		else if (direction.right == true && mapCollision.bottomCol === true && mapCollision.leftCol === false) {
-			if (mapCollision.rightCol === true) {
-				mapCollision.rightCol = false;
-			}
+		else if (direction.right == true && /*mapCollision.bottomCol === true && */mapCollision.leftCol === false) {
+			
+			console.log("this")
 			this.x+= this.dx;
-			trans= this.dx;
-			this.rightX += this.dx;
-			this.leftX += this.dx;
-			console.log(this.rightX)
-
+			trans += this.dx;
+			// this.rightX += this.dx;
+			// this.leftX += this.dx;
+			//console.log(this.rightX)
 			c.translate(-trans, 0);
-			// this.x += first.dx;
-			
-			
-			// c.setTransform(0, 0, 0, 0, trans, 0)
-			//tutG.x += first.dx;
 		}
+
 		else if (direction.left === true && mapCollision.rightCol == true && mapCollision.bottomCol === true) {
 			this.x += 0;
 		}
-		else if (direction.left == true && mapCollision.bottomCol === true && mapCollision.rightCol === false) {
-			if(mapCollision.leftCol === true){
-				mapCollision.leftCol = false;
-			}
+
+		else if (direction.left == true && mapCollision.topCol === true && mapCollision.rightCol === false) {
+		
+				
+	
 			this.leftX -= this.dx;
 			this.x -= this.dx;
-			trans = -this.dx;
+			trans -= this.dx;
             this.rightX -= this.dx;
-			c.translate(-trans, 0);
+			c.translate(trans, 0);
 			//tutG.x += first.dx;
 		}
-		else if (direction.down == true && mapCollision.bottomCol === true) {
+
+		else if (direction.down == true && mapCollision.topCol === true) {
 			this.y += first.dy;
-			this.rightY[0] += first.dy;
-			this.rightY[1] += first.dy;
-			//console.log(this.rightY[0])
-			this.leftY[0] += first.dy;
-			this.leftY[1] += first.dy;
-			//tutG.y--;
-		}
-		else if (direction.up == true && mapCollision.bottomCol === true) {
-			this.y -= first.dy;
-			this.y += gravity;
-			this.jump = true;
-			this.rightY[0] -= first.dy;
-			this.rightY[1] -= first.dy;
-			//console.log(this.rightY[0])
-			this.leftY[0] -= first.dy;
-			this.leftY[1] -= first.dy;
-			//	tutG.y += 3;
-		}
-		else if(direction.up == true && mapCollision.bottomCol === false && jump === true){
-			console.log("cant jump in the air now.")
+			this.bottomY += this.dy
 		}
 
-
-		else {
-			this.x += 0;
-			trans = 0;
-			c.translate(-trans, 0);
-			// aBlock.y-= gravity;
-			if (this.y < 310) {
+		else if (direction.up == true && mapCollision.topCol === true) {
+			
+			this.y -= this.dy;
+			this.bottomY -= this.dy;	
+			//this.jump = true;
+		}
+	else{
+			if (this.bottomY < groundy) {
+				this.bottomY += gravity;
 				this.y += gravity;
-				this.rightY[0] = this.y;
-				this.rightY[1] = this.y + this.height;
-				console.log(this.rightY[0])
-				this.leftY[0] = this.y;
-				this.leftY[1] = this.y + this.height;
+	}
+	}
+			
+			
+			
+			// 	this.rightY[0] = this.y;
+			// 	this.rightY[1] = this.y + this.height;
+			// //	console.log(this.rightY[0])
+			// 	this.leftY[0] = this.y;
+			// 	this.leftY[1] = this.y + this.height;
 
-			}
-
-			//	tutG.x += 0;
-		}
+			
+		
 	}
 	
 
-	isCollidingDown(aby){
-		for(let t = 0; t < this.bottomX.length;t++){
-			if(aby - this.bottomY === 0){
-				mapCollision.bottomCol = true;
-				
-				return this.colisionDown;
-			}
-			else{
-				mapCollision.bottomCol = false;
-			}
-		}
-	}
-	// isColidingRight(abx){
-	// 	for(let g = 0; g < this.rightY.length; g++){
-	// 		if 
-	// 	}
-
-	// }
-
+	
 
  //visual player
   thePlayer (firstx,firsty,firstW , firstH){
@@ -331,15 +307,11 @@ c.fillRect(firstx, firsty, firstW, firstH)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const game = {
 	colDetObjLeft(RightX, RightY, LeftX, LeftY){
-		// console.log('RightX', RightX)
-		// console.log('LeftX', LeftX)
+
 		if(RightX === LeftX){	
 	
 			if (((RightY[1] >= LeftY[0] && RightY[1] <= LeftY[1]) && (RightY[0] <= LeftY[0] && RightY[0] <= LeftY[1])) || ((RightY[1] >= LeftY[0] && RightY[1] >= LeftY[1]) && (RightY[0] >= LeftY[0] && RightY[0] <= LeftY[1]))){
-				// console.log("Ry[1] - Ly[0]", RightY[1] - LeftY[0])
-				// console.log("Ry[0] - Ly[1]",RightY[0] - LeftY[1])
-				// console.log("Ry[0] - Ly[0]",RightY[0] - LeftY[0])
-				// console.log("Ry[1] - Ly[1]",RightY[0] - LeftY[1])
+			
 				
 				mapCollision.leftCol = true;
 		
@@ -374,8 +346,8 @@ const game = {
 		}
 },
 	colDetObjRight(LeftX, LeftY, RightX, RightY) {
-		 console.log('RightX', RightX)
-		 console.log('LeftX', LeftX)
+		//  console.log('RightX', RightX)
+		//  console.log('LeftX', LeftX)
 		if (RightX === LeftX) {
               console.log("got here")
 			if (((LeftY[0] <= RightY[0] && LeftY[0] <= RightY[1]) && (LeftY[1] >= RightY[0] && LeftY[1] <= RightY[1])) || ((LeftY[0] >= RightY[0] && LeftY[0] <= RightY[1]) && (LeftY[1] >= RightY[0] && LeftY[1] <= RightY[1]))) {
@@ -413,6 +385,56 @@ const game = {
 			//console.log("false")
 		}
 	},
+	colDetObjTop(PLeftX, PRightX, OLeftX, ORightX, PBottomY, OTopY ){
+	
+		if (PBottomY === OTopY){
+
+			//console.log("flat")
+
+			 if((PLeftX <= OLeftX && PLeftX <= ORightX) && (PRightX >= OLeftX && PRightX <= ORightX)){
+				mapCollision.topCol = true;
+				
+			}
+			else if (((PLeftX >= ORightX && PLeftX <= ORightX) && (PRightX >= OLeftX && PRightX >= ORightX))){
+				mapCollision.topCol = true;
+				
+			}
+			else if (((PLeftX >= OLeftX && PLeftX <= ORightX) && (PRightX >= OLeftX && PRightX <= ORightX))){
+				mapCollision.topCol = true;
+				//console.log("success")
+			}
+
+
+
+			else if (((PLeftX < OLeftX) && (PLeftX < ORightX))&& (PRightX <= OLeftX && PRightX < ORightX)) {
+				mapCollision.topCol = false;
+				
+			}
+			else if (((PLeftX > OLeftX) && (PLeftX >= ORightX)) && (PRightX > OLeftX && PRightX > ORightX)) {
+				mapCollision.topCol = false;
+				
+			}
+			else {
+				mapCollision.topCol = false;
+				
+			}
+		}
+		
+	},
+	// colDetObjBottom(PLeftX, PRightX, OLeftX, ORightX, PTopY, OBottomY) {
+		
+	// 	if (PTopY === OBottomY) {
+	// 		if ((PLeftX < OLeftX && PLeftX < ORightX) && (PRightX > OLeftX && PRightX < ORightX) || ((PLeftX > ORightX && PLeftX < ORightX) && (PRightX > OLeftX && PRightX > ORightX))) {
+	// 			mapCollision.bottomCol = true;
+	// 		}
+	// 		else if (((PLeftX < OLeftX) && (PLeftX < ORightX)) && (PRightX < OLeftX && PRightX < ORightX)) {
+	// 			mapCollision.bottomCol = false;
+	// 		}
+	// 		else if (((PLeftX > OLeftX) && (PLeftX > ORightX)) && (PRightX > OLeftX && PRightX > ORightX)) {
+	// 			mapCollision.bottomCol = false;
+	// 		}
+	// 	}
+	// }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,7 +442,7 @@ const game = {
 
 	
 	const init  = () => {
-	    first = new ThePlayer(75,310,40,80,5,7,3,3,false);
+	    first = new ThePlayer(75,240,40,80,5,7,3,3,false);
 		aBlock = new Block(400, 350, 40, 40);
 		a2Block = new Block(600, 350, 40, 40);
 		a3Block = new Block(900, 350, 40 ,40);
@@ -443,17 +465,17 @@ const game = {
 		a2Block.theEnemies(a2Block.x, a2Block.y, a2Block.width, a2Block.height);
 		a2Block.theEnemies(a3Block.x, a3Block.y, a3Block.width, a3Block.height);
 		tutG.theGround(tutG.x,tutG.y);
-
-		//first.findRight();
-		//aBlock.findRight();
 		
+		
+
+        game.colDetObjTop(first.leftX, first.rightX, 0, tutG.x, first.bottomY, tutG.y)
+		//game.colDetObjTop(first.leftX, first.rightX, aBlock.leftX, aBlock.rightX, first.bottomY, aBlock.topY)
 		game.colDetObjRight(first.leftX, first.leftY, aBlock.rightX, aBlock.rightY)
 		game.colDetObjLeft(first.rightX, first.rightY, aBlock.leftX, aBlock.leftY);
-		first.isCollidingDown(aBlock.y);
-		//console.log(first.rightY)
-		// RightY = [];
-		// LeftY = [];
-		first.moving();
+		//console.log("first.bottomY ", first.bottomY)
+  
+		first.moving(tutG.y);
+
 		
 	
 	}
@@ -486,48 +508,48 @@ $(document).on("keydown", (event) =>{
 	if (event.keyCode == 39) {
 		preventDefault()
 		direction.right = true;
-		movingRight();
+		//movingRight();
 	}
 	else if (event.keyCode == 38) {
 		preventDefault()
 		direction.up = true;
 		jump = true;
-		movingUp();
+		//movingUp();
 	}
 	else if (event.keyCode == 37) {
 		preventDefault()
 		direction.left = true;
-		movingLeft();
+		//movingLeft();
 	}
 	else if (event.keyCode == 40) {
 		preventDefault()
 		direction.down = true;
-		movingDown();
+		//movingDown();
 	}
 
 // the function call that fires bullets
 	else if(event.keyCode == 32){
 		preventDefault()
-		fire();
+		//fire();
 		
 	}
-}).on("keyup", (e)=>{
+}).on("keyup", (event)=>{
 
 	//resets direction object
  if(event.keyCode == 39 ){  
-console.log("stopped moving right");
+   //console.log("stopped moving right");
  direction.right = false;
 }
 else if(event.keyCode == 38){
-	console.log("stopped moving up");
+	//console.log("stopped moving up");
 	direction.up = false;
 }
 else if(event.keyCode == 37){
-	console.log("stopped moving left");
+	//console.log("stopped moving left");
 	direction.left = false;
 }
 else if(event.keyCode == 40){
-	console.log("stopped moving down");
+	//console.log("stopped moving down");
 	direction.down = false;
 }
 
@@ -550,7 +572,7 @@ fireCounter = 0;
 init();
 animation();
 
-console.log(aBlock.leftX) 
+//console.log(aBlock.leftX) 
 // console.log(aBlock.rightY)
  
 
