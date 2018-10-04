@@ -15,6 +15,7 @@ let direction = {
 let mapCollision ={
 	leftCol: false,
 	topCol: false,
+	topCol2: false,
 	rightCol:false,
 	bottomCol: false
 }
@@ -29,21 +30,26 @@ let trans;
 let allEnemies = [];
 let fireCounter = 0;
 let gravity = 1;
+let distanceCounter = 0;
 
 ///////////////////////////////////////////////////////////////////
-// const movingLeft = () =>{
-// 	console.log("moving left");
-// };
+const movingLeft = () =>{
+	console.log("moving left");
+	
+	
+};
 
 
-// const movingUp = () =>{
-// 	console.log("moving up");
-// };
+const movingUp = () =>{
+	console.log("moving up");
+
+};
 
 
-// const movingRight = () =>{
-// 	console.log("moving right");
-// };
+const movingRight = () =>{
+	console.log("moving right");
+
+};
 
 
 // const movingDown = () =>{
@@ -51,20 +57,20 @@ let gravity = 1;
 // };
 ///////////////////////////////////////////////////////////////////
 
-const fire = () => {
-  if (fireCounter === 0) {
-  	console.log('Pew!')
-  	fireCounter++;
-  }
-  else if (fireCounter <= 4){
-  	let firing = setTimeout(()=>{
-  		console.log('Pew!')
-  		fireCounter++;
+// const fire = () => {
+//   if (fireCounter === 0) {
+//   	console.log('Pew!')
+//   	fireCounter++;
+//   }
+//   else if (fireCounter <= 4){
+//   	let firing = setTimeout(()=>{
+//   		console.log('Pew!')
+//   		fireCounter++;
 
   		
-  	}, 1500)
-  }
-}
+//   	}, 1500)
+//   }
+// }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +93,7 @@ canvas.height = window.innerHeight;
 }
 let c = canvas.getContext('2d');
 canvas.width = 4000;
-//c.setTransform(-10000, 0, 0, 0, 0, 0)
+
 canvas.height = window.innerHeight;
 
 //window.addEventListener("resize", resizer)
@@ -127,50 +133,107 @@ class Ground{
 
 class Block {
 	constructor(x,y,width,height){
-		this.x = x;
-		this.y = y;
+		this.leftX = x;
+		this.topY = y;
 		this.width = width;
 		this.height = height;
-		this.left = x;
-		this.right = x + width;
-		this.topY = this.y;
-		this.topX = [this.x, this.x + this.width];
-		this.bottomY = this.y - 80;
-		this.bottomX = [this.x, this.x + this.width];
-		this.leftX = this.x;
-		this.leftY = [this.y, this.y + this.height];
-		this.rightX = this.x + 40;
-		this.rightY = [this.y, this.y + this.height];
-		;
-		
-
+		this.rightX = x + width;
+		this.bottomY = y + height;
 	}
 	theEnemies(abx, aby, abw, abh) {
 		c.fillStyle = '#FF0000';
 		c.fillRect(abx, aby, abw, abh);
 	}
 
-	findBottom() {
-		for (let r = 0; r < this.x + 41; r++) {
-			if (r <= r - this.width || r > r + this.width) {
+	moving(groundy, Pspeed, Pjump, PTopY, PBottomY) {
+		
+		
+           
+	
 
-			}
-			else if (r > this.x - 1 && r < this.x + this.width + 1) {
-				this.bottomX.push(r- 40);
-				this.topX.push(r);
+		    
+			
+		
+		// else if ((direction.right === true && mapCollision.leftCol == true) || (direction.left === true && mapCollision.rightCol == true && mapCollision.topCol === true) || (direction.down === true && mapCollision.topCol === true)) {
+		// 	this.x += 0;
+		// 	this.y += 0;
+		// }
+	  
+		if (mapCollision.topCol2 == true) {
+			first.TopY += 0;
+			first.bottomY += 0;
+			if (direction.left == true && mapCollision.topCol === true && mapCollision.leftCol === false) {
 
+				mapCollision.rightCol = false;
+				this.leftX += Pspeed;
+				this.rightX += Pspeed;
+			} 
+			else if (direction.right == true && mapCollision.topCol === true && mapCollision.rightCol === false) {
+				mapCollision.leftCol = false;
+				//trans -= this.dx;
+				this.leftX -= Pspeed;
+				this.rightX -= Pspeed;
+				//console.log(this.rightX)
+				// c.translate(trans, 0);
 			}
 		}
+		else if (direction.down === true && mapCollision.topCol == true) {
+			this.x += 0;
+		}
+		else if (direction.right == true && mapCollision.topCol === true && mapCollision.rightCol === false) {
+			mapCollision.leftCol = false;
+			//trans -= this.dx;
+			this.leftX -= Pspeed;
+			this.rightX-= Pspeed;
+			distanceCounter += Pspeed;
+			//console.log(this.rightX)
+			// c.translate(trans, 0);
+		}
+
+		else if (direction.left === true && mapCollision.leftCol == true && mapCollision.topCol === true) {
+			this.x += 0;
+		}
+
+		else if (direction.left == true && mapCollision.topCol === true && mapCollision.leftCol === false) {
+
+			mapCollision.rightCol = false;
+			this.leftX += Pspeed;
+			this.rightX += Pspeed;
+		}
+
+		else if (direction.down == true && mapCollision.topCol === true) {
+			first.topY -= first.dy;
+			first.bottomY -= this.dy
+
+		}
+
+		 else if (direction.up == true && (mapCollision.topCol === true || mapCollision.topCol2) && PTopY <= 310 && PBottomY <= 390) {
+           // mapCollision.topCol = false;
+			first.topY -= Pjump;
+			first.bottomY -= Pjump;
+
+
+		}
+		 
+		else {
+
+			if (first.bottomY < groundy) {
+				first.bottomY += gravity;
+				first.topY += gravity;
+			}
+
+			else if( mapCollision.topCol)
+			 if (first.bottomY > groundy) {
+				this.bottomY -= gravity;
+				this.y -= gravity;
+
+			}
+			 else {
+				 mapCollision.topCol = true;
+			 }
+
+		}
 	}
-	
-// 	getDistance(x1, y1, player) {
-// 	xDistance = (x1 + player) - this.x;
-// 	yDistance = (y1 + player) - this.y;
-
-// 	let total = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
-// 	// console.log(yDistance);
-
-// }
 }
 
 
@@ -185,114 +248,20 @@ class Block {
 
 class ThePlayer {
 	constructor(x, y, width, height, dx, dy, health, ammo, win){
-		this.x = x;
-		this.y = y;
+		this.leftX = x;
+		this.topY = y;
 		this.width = width;
 		this.height = height;
 		this.dx = dx;
 		this.dy = dy;
-		this.leftX = this.x; //collison top and bottom
-		this.leftY = [this.y, this.y + this.height];
-		this.rightX = this.x + 40; //collison top and bottom
-		this.rightY = [this.y, this.y + this.height];
-		this.bottomY = this.y + 80; //collison top and bottom
-		this.bottomX = [this.x, this.x + this.width]; // same as LeftY and RightY
-		this.topY = this.y; //collison top and bottom
-		this.topX = [this.x, this.x + this.width]; // same as LeftY and RightY
+		this.rightX = x + width;
+		this.bottomY = y + height;
 
         
 		this.health = health;
 		this.ammo = ammo;
 		this.win = win;
 	}
-	moving(groundy) {
-		
-		if(mapCollision.topCol === false){
-			console.log(mapCollision.topCol)
-			if(this.bottomY < groundy) {
-				this.bottomY += gravity;
-				this.y += gravity;
-				//trans += gravity;
-				c.translate(-trans, 0)
-			}
-			
-		}
-		// else if (direction.left == true && direction.up == true && mapCollision.topCol === true) {
-		// 	this.x -= this.dx;
-		// 	this.y -=this.dy;
-		// 	this.y += gravity;
-		// }
-		// else if ((direction.right === true && mapCollision.leftCol == true && mapCollision.topCol === true) || (direction.left === true && mapCollision.rightCol == true && mapCollision.topCol === true)|| (direction.down === true && mapCollision.topCol === true)){
-		// 	this.x += 0;
-		// 	this.y += 0;
-		// }
-		else if ((direction.right === true && mapCollision.leftCol == true && mapCollision.topCol === false) || (direction.left === true && mapCollision.rightCol == true && mapCollision.topCol === false) ){
-			this.x += 0;
-			
-
-		}
-		else if (direction.down === true && mapCollision.topCol == true) {
-			this.x += 0;
-		}
-		else if (direction.right == true && /*mapCollision.bottomCol === true && */mapCollision.leftCol === false) {
-			
-			console.log("this")
-			this.x+= this.dx;
-			trans += this.dx;
-			// this.rightX += this.dx;
-			// this.leftX += this.dx;
-			//console.log(this.rightX)
-			c.translate(-trans, 0);
-		}
-
-		else if (direction.left === true && mapCollision.rightCol == true && mapCollision.bottomCol === true) {
-			this.x += 0;
-		}
-
-		else if (direction.left == true && mapCollision.topCol === true && mapCollision.rightCol === false) {
-		
-				
-	
-			this.leftX -= this.dx;
-			this.x -= this.dx;
-			trans -= this.dx;
-            this.rightX -= this.dx;
-			c.translate(trans, 0);
-			//tutG.x += first.dx;
-		}
-
-		else if (direction.down == true && mapCollision.topCol === true) {
-			this.y += first.dy;
-			this.bottomY += this.dy
-		}
-
-		else if (direction.up == true && mapCollision.topCol === true) {
-			
-			this.y -= this.dy;
-			this.bottomY -= this.dy;	
-			//this.jump = true;
-		}
-	else{
-			if (this.bottomY < groundy) {
-				this.bottomY += gravity;
-				this.y += gravity;
-	}
-	}
-			
-			
-			
-			// 	this.rightY[0] = this.y;
-			// 	this.rightY[1] = this.y + this.height;
-			// //	console.log(this.rightY[0])
-			// 	this.leftY[0] = this.y;
-			// 	this.leftY[1] = this.y + this.height;
-
-			
-		
-	}
-	
-
-	
 
  //visual player
   thePlayer (firstx,firsty,firstW , firstH){
@@ -305,119 +274,100 @@ c.fillRect(firstx, firsty, firstW, firstH)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const game = {
-	colDetObjLeft(RightX, RightY, LeftX, LeftY){
+ game = {
+	 colDetObjLeft(PTopY, PBottomY, PRightX, OTopY, OBottomY,OLeftX ){
 
-		if(RightX === LeftX){	
-	
-			if (((RightY[1] >= LeftY[0] && RightY[1] <= LeftY[1]) && (RightY[0] <= LeftY[0] && RightY[0] <= LeftY[1])) || ((RightY[1] >= LeftY[0] && RightY[1] >= LeftY[1]) && (RightY[0] >= LeftY[0] && RightY[0] <= LeftY[1]))){
+		
+		if(PRightX === OLeftX){	
 			
-				
-				mapCollision.leftCol = true;
-		
-		
+			
+			if (((PBottomY >= OTopY && PBottomY <= OBottomY) && (PTopY < OTopY && PTopY < OBottomY)) || ((PBottomY >= OTopY && PBottomY >= OBottomY) && (PTopY >= OTopY && PTopY <= OBottomY))){
+				mapCollision.leftCol = true;	
 				return;
 				}
-			else if (RightY[1] > LeftY[0] && RightY[1] > LeftY[1]){
-				mapCollision.leftCol = false;
-				console.log("positive answer: 1 under block #2")
+		    else if ((PBottomY < OTopY && PBottomY < OBottomY) && (PBottomY < OTopY && PBottomY < OBottomY)) {
+			mapCollision.leftCol = false;
+		}
+			else if ((PBottomY > OTopY && PBottomY > OBottomY) && (PBottomY > OTopY && PBottomY > OBottomY)){
+				mapCollision.leftCol = false;			
 			}
-			else if (RightY[0] < LeftY[0] && RightY[0] < LeftY[1]){
-				mapCollision.leftCol = false;
-				console.log("negative answer: 0 above block #1")
-			}
-			else if (RightY[1] < LeftY[0] && RightY[1] < LeftY[1]){
-				mapCollision.leftCol = false;
-				console.log("negative answer: 1 above block #3")
-			}
-			else if (RightY[0] > LeftY[0] && RightY[0] > LeftY[1]){
-				mapCollision.leftCol = false;
-				console.log("positive answer: 0 under block #4")
-			}
-
 			else{
 				mapCollision.leftCol = false;
-	}
+	        }
 		}
-		
 		else {
 			mapCollision.leftCol = false;
-			//console.log("false")
+		
 		}
-},
-	colDetObjRight(LeftX, LeftY, RightX, RightY) {
-		//  console.log('RightX', RightX)
-		//  console.log('LeftX', LeftX)
-		if (RightX === LeftX) {
-              console.log("got here")
-			if (((LeftY[0] <= RightY[0] && LeftY[0] <= RightY[1]) && (LeftY[1] >= RightY[0] && LeftY[1] <= RightY[1])) || ((LeftY[0] >= RightY[0] && LeftY[0] <= RightY[1]) && (LeftY[1] >= RightY[0] && LeftY[1] <= RightY[1]))) {
-				// console.log("Ry[1] - Ly[0]", RightY[1] - LeftY[0])
-				// console.log("Ry[0] - Ly[1]",RightY[0] - LeftY[1])
-				// console.log("Ry[0] - Ly[0]",RightY[0] - LeftY[0])
-				// console.log("Ry[1] - Ly[1]",RightY[0] - LeftY[1])
+    },
+	 colDetObjRight(PTopY, PBottomY, PLeftX, OTopY, OBottomY, ORightX) {
+        
+		if (ORightX === PLeftX) {
 
+			if (((PBottomY >= OTopY && PBottomY <= OBottomY) && (PTopY < OTopY && PTopY < OBottomY)) || ((PBottomY >= OTopY && PBottomY >= OBottomY) && (PTopY >= OTopY && PTopY <= OBottomY))) {
 				mapCollision.rightCol = true;
 				return;
-			}
-			// vvv  first and second not actulally doing anything vvvv
-			else if (LeftY[1] > RightY[0] && LeftY[1] > RightY[1]) {
-				mapCollision.righttCol = false;
-				console.log("positive answer: 1 under block #2")
-			}
-			else if (LeftY[0] < RightY[0] && LeftY[0] < RightY[1]) {
+			  }
+			
+			  else if ((PBottomY < OTopY && PBottomY < OBottomY) && (PBottomY < OTopY && PBottomY < OBottomY)) {
 				mapCollision.rightCol = false;
-				console.log("negative answer: 0 above block #1")
-			}
-			else if (LeftY[1] < RightY[0] && LeftY[1] < RightY[1]) {
+			  }
+			  else if ((PBottomY > OTopY && PBottomY > OBottomY) && (PBottomY > OTopY && PBottomY > OBottomY)) {
 				mapCollision.rightCol = false;
-				console.log("negative answer: 1 above block #3")
-			}
-			else if (LeftY[0] > RightY[0] && LeftY[0] > RightY[1]) {
+			  }
+			  else {
 				mapCollision.rightCol = false;
-				console.log("positive answer: 0 under block #4")
+				
 			}
-			else {
-				mapCollision.rightCol = false;
-			}
-		}
-		else {
+		  }
+		  else {
 			mapCollision.rightCol = false;
-			//console.log("false")
+			
 		}
 	},
 	colDetObjTop(PLeftX, PRightX, OLeftX, ORightX, PBottomY, OTopY ){
 	
 		if (PBottomY === OTopY){
-
-			//console.log("flat")
+			
+			
 
 			 if((PLeftX <= OLeftX && PLeftX <= ORightX) && (PRightX >= OLeftX && PRightX <= ORightX)){
-				mapCollision.topCol = true;
-				
+				mapCollision.topCol2 = true;
+				 
 			}
-			else if (((PLeftX >= ORightX && PLeftX <= ORightX) && (PRightX >= OLeftX && PRightX >= ORightX))){
-				mapCollision.topCol = true;
-				
+			else if (((PLeftX >= OLeftX && PLeftX <= ORightX) && (PRightX >= OLeftX && PRightX >= ORightX))){
+				mapCollision.topCol2 = true;
+				 
 			}
 			else if (((PLeftX >= OLeftX && PLeftX <= ORightX) && (PRightX >= OLeftX && PRightX <= ORightX))){
 				mapCollision.topCol = true;
-				//console.log("success")
+				
+				
 			}
 
 
 
 			else if (((PLeftX < OLeftX) && (PLeftX < ORightX))&& (PRightX <= OLeftX && PRightX < ORightX)) {
-				mapCollision.topCol = false;
-				
+				mapCollision.topCol2 = false;
+				 
 			}
 			else if (((PLeftX > OLeftX) && (PLeftX >= ORightX)) && (PRightX > OLeftX && PRightX > ORightX)) {
-				mapCollision.topCol = false;
+				mapCollision.topCol2 = false;
+				 
 				
 			}
 			else {
 				mapCollision.topCol = false;
+				 
+				
 				
 			}
+		}
+		else {
+			mapCollision.topCol2 = false;
+			
+			
+
 		}
 		
 	},
@@ -442,7 +392,7 @@ const game = {
 
 	
 	const init  = () => {
-	    first = new ThePlayer(75,240,40,80,5,7,3,3,false);
+	    first = new ThePlayer(75,310,40,80,5,7,3,3,false);
 		aBlock = new Block(400, 350, 40, 40);
 		a2Block = new Block(600, 350, 40, 40);
 		a3Block = new Block(900, 350, 40 ,40);
@@ -460,22 +410,31 @@ const game = {
 	const animation = () =>{
 		requestAnimationFrame(animation);
 	    c.clearRect(0, 0, innerWidth, innerHeight);
-	    first.thePlayer(first.x,first.y,first.width,first.height);
-	    aBlock.theEnemies(aBlock.x, aBlock.y, aBlock.width, aBlock.height);
-		a2Block.theEnemies(a2Block.x, a2Block.y, a2Block.width, a2Block.height);
-		a2Block.theEnemies(a3Block.x, a3Block.y, a3Block.width, a3Block.height);
+	    first.thePlayer(first.leftX,first.topY,first.width,first.height);
+	    aBlock.theEnemies(aBlock.leftX, aBlock.topY, aBlock.width, aBlock.height);
+		a2Block.theEnemies(a2Block.leftX, a2Block.topY, a2Block.width, a2Block.height);
+		a2Block.theEnemies(a3Block.leftX, a3Block.topY, a3Block.width, a3Block.height);
 		tutG.theGround(tutG.x,tutG.y);
 		
 		
-
-        game.colDetObjTop(first.leftX, first.rightX, 0, tutG.x, first.bottomY, tutG.y)
-		//game.colDetObjTop(first.leftX, first.rightX, aBlock.leftX, aBlock.rightX, first.bottomY, aBlock.topY)
-		game.colDetObjRight(first.leftX, first.leftY, aBlock.rightX, aBlock.rightY)
-		game.colDetObjLeft(first.rightX, first.rightY, aBlock.leftX, aBlock.leftY);
-		//console.log("first.bottomY ", first.bottomY)
+        // ground
+		game.colDetObjTop(aBlock.leftX, aBlock.rightX, 0, tutG.x, aBlock.bottomY, tutG.y)
+ 
+		//first object
+     
+		game.colDetObjTop(first.leftX, first.rightX, aBlock.leftX, aBlock.rightX, first.bottomY, aBlock.topY)
+		game.colDetObjRight(first.topY, first.bottomY, first.rightX, aBlock.topY, aBlock.bottomY, aBlock.leftX)
+		game.colDetObjLeft(first.topY, first.bottomY, first.leftX, aBlock.topY, aBlock.bottomY, aBlock.rightX);
+		
+		if(distanceCounter === 300){
+			console.log("activated")
+			game.colDetObjTop(first.leftX, first.rightX, a2Block.leftX, a2Block.rightX, first.bottomY, a2Block.topY)
+			game.colDetObjRight(first.topY, first.bottomY, first.rightX, a2Block.topY, a2Block.bottomY, a2Block.leftX)
+			game.colDetObjLeft(first.topY, first.bottomY, first.leftX, a2Block.topY, a2Block.bottomY, a2Block.rightX);
+		}
   
-		first.moving(tutG.y);
-
+		aBlock.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+		a2Block.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
 		
 	
 	}
@@ -508,18 +467,18 @@ $(document).on("keydown", (event) =>{
 	if (event.keyCode == 39) {
 		preventDefault()
 		direction.right = true;
-		//movingRight();
+		movingRight();
 	}
 	else if (event.keyCode == 38) {
 		preventDefault()
 		direction.up = true;
 		jump = true;
-		//movingUp();
+		movingUp();
 	}
 	else if (event.keyCode == 37) {
 		preventDefault()
 		direction.left = true;
-		//movingLeft();
+		movingLeft();
 	}
 	else if (event.keyCode == 40) {
 		preventDefault()
