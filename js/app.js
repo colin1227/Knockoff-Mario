@@ -309,16 +309,16 @@ const game = {
 const init = () => {
     first = new ThePlayer(75, 310, 40, 80, 5, 7, 3, 3, false);
     block1 = new Block(350, 270, 70, 70)
-    block2 = new Block(625)
-    block3 = new Block(750)
-    block4 = new Block(1000)
-    block5 = new Block(1250)
-    block6 = new Block(925)
-    block7 = new Block(875)
-    block8 = new Block()
-    block9 = new Block()
-    block10 = new Block()
-    block11 = new Block()
+    block2 = new Block(625, 190, 70, 70)
+    block3 = new Block(750, 350, 40, 90)
+    block4 = new Block(1000, 350, 20, 50)
+    block5 = new Block(1250, 250, 50, 50)
+    block6 = new Block(1425, 150, 30, 75)
+    block7 = new Block(1075, 375,120, 25)
+    block8 = new Block(1800, 385, 225, 15)
+    // block9 = new Block()
+    // block10 = new Block()
+    // block11 = new Block()
     tutG = new Ground(window.innerWidth, 390);
     allEnemies.push(aBlock)
     allEnemies.push(a2Block)
@@ -328,28 +328,35 @@ const animation = () => {
     requestAnimationFrame(animation);
     c.clearRect(0, 0, innerWidth, innerHeight);
     first.thePlayer(first.leftX, first.topY, first.width, first.height);
-    aBlock.theEnemies(aBlock.leftX, aBlock.topY, aBlock.width, aBlock.height);
-    a2Block.theEnemies(a2Block.leftX, a2Block.topY, a2Block.width, a2Block.height);
-    a2Block.theEnemies(a3Block.leftX, a3Block.topY, a3Block.width, a3Block.height);
+    block1.theEnemies(block1.leftX, block1.topY, block1.width, block1.height);
+    block2.theEnemies(block2.leftX, block2.topY, block2.width, block2.height);
+    block3.theEnemies(block3.leftX, block3.topY, block3.width, block3.height);
+    block4.theEnemies(block4.leftX, block4.topY, block4.width, block4.height);
+    block5.theEnemies(block5.leftX, block5.topY, block5.width, block5.height);
+    block6.theEnemies(block6.leftX, block6.topY, block6.width, block6.height);
+    block7.theEnemies(block7.leftX, block7.topY, block7.width, block7.height);
+    block8.theEnemies(block8.leftX, block8.topY, block8.width, block8.height);
+    
     tutG.theGround(tutG.x, tutG.y);
 
 
     // ground
-    game.colDetObjTop(aBlock.leftX, aBlock.rightX, 0, tutG.x, aBlock.bottomY, tutG.y)
+    game.colDetObjTop(first.leftX, first.rightX, 0, tutG.x, first.bottomY, tutG.y)
 
     //first object
-       
-        
-    
 
     // else if (800 <= distanceCounter >= 1200) {
     //     b2();
     // }
 
-    aBlock.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
-    a2Block.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
-    a3Block.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
-
+    block1.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block2.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block3.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block4.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block5.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block6.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block7.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block8.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
 
 }
 
