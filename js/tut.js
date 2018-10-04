@@ -151,7 +151,7 @@ class Block {
            
 	
 console.log(distanceCounter)
-		    
+		
 			
 		
 		// else if ((direction.right === true && mapCollision.leftCol == true) || (direction.left === true && mapCollision.rightCol == true && mapCollision.topCol === true) || (direction.down === true && mapCollision.topCol === true)) {
@@ -163,7 +163,7 @@ console.log(distanceCounter)
 			first.TopY += 0;
 			first.bottomY += 0;
 			if (direction.left == true && mapCollision.topCol === true && mapCollision.leftCol === false) {
-                distanceCounter -= Pspeed;
+                
 				mapCollision.rightCol = false;
 				this.leftX += Pspeed;
 				this.rightX += Pspeed;
@@ -477,6 +477,7 @@ $(document).on("keydown", (event) =>{
 	else if (event.keyCode == 37) {
 		preventDefault()
 		direction.left = true;
+		distanceCounter -= 5;
 		movingLeft();
 	}
 	else if (event.keyCode == 40) {
@@ -505,6 +506,7 @@ else if(event.keyCode == 38){
 else if(event.keyCode == 37){
 	//console.log("stopped moving left");
 	direction.left = false;
+	
 }
 else if(event.keyCode == 40){
 	//console.log("stopped moving down");

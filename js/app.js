@@ -308,7 +308,7 @@ const game = {
 }
 const init = () => {
     first = new ThePlayer(75, 310, 40, 80, 5, 7, 3, 3, false);
-    block1 = new Block(350, 270, 70, 70)
+    block1 = new Block(310, 270, 70, 70)
     block2 = new Block(625, 190, 70, 70)
     block3 = new Block(750, 350, 40, 90)
     block4 = new Block(1000, 350, 20, 50)
