@@ -150,7 +150,7 @@ class Block {
 		
            
 	
-
+console.log(distanceCounter)
 		    
 			
 		
@@ -163,18 +163,17 @@ class Block {
 			first.TopY += 0;
 			first.bottomY += 0;
 			if (direction.left == true && mapCollision.topCol === true && mapCollision.leftCol === false) {
-
+                distanceCounter -= Pspeed;
 				mapCollision.rightCol = false;
 				this.leftX += Pspeed;
 				this.rightX += Pspeed;
 			} 
 			else if (direction.right == true && mapCollision.topCol === true && mapCollision.rightCol === false) {
 				mapCollision.leftCol = false;
-				//trans -= this.dx;
+				distanceCounter += Pspeed;
 				this.leftX -= Pspeed;
 				this.rightX -= Pspeed;
-				//console.log(this.rightX)
-				// c.translate(trans, 0);
+				
 			}
 		}
 		else if (direction.down === true && mapCollision.topCol == true) {
@@ -421,17 +420,17 @@ c.fillRect(firstx, firsty, firstW, firstH)
 		game.colDetObjTop(aBlock.leftX, aBlock.rightX, 0, tutG.x, aBlock.bottomY, tutG.y)
  
 		//first object
-     
+        if( distanceCounter < 800){
 		game.colDetObjTop(first.leftX, first.rightX, aBlock.leftX, aBlock.rightX, first.bottomY, aBlock.topY)
 		game.colDetObjRight(first.topY, first.bottomY, first.rightX, aBlock.topY, aBlock.bottomY, aBlock.leftX)
 		game.colDetObjLeft(first.topY, first.bottomY, first.leftX, aBlock.topY, aBlock.bottomY, aBlock.rightX);
-		
-		if(distanceCounter === 300){
-			console.log("activated")
+		}
+		 else if(distanceCounter >= 800  && distanceCounter <= 1200){
+			//console.log("activated")
 			game.colDetObjTop(first.leftX, first.rightX, a2Block.leftX, a2Block.rightX, first.bottomY, a2Block.topY)
 			game.colDetObjRight(first.topY, first.bottomY, first.rightX, a2Block.topY, a2Block.bottomY, a2Block.leftX)
 			game.colDetObjLeft(first.topY, first.bottomY, first.leftX, a2Block.topY, a2Block.bottomY, a2Block.rightX);
-		}
+		  }
   
 		aBlock.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
 		a2Block.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);

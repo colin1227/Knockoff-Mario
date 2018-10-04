@@ -315,10 +315,17 @@ const init = () => {
     block5 = new Block(1250, 250, 50, 50)
     block6 = new Block(1425, 150, 30, 75)
     block7 = new Block(1075, 375,120, 25)
-    block8 = new Block(1800, 385, 225, 15)
-    // block9 = new Block()
-    // block10 = new Block()
-    // block11 = new Block()
+    block8 = new Block(1800, 345, 225, 35)
+    block9 = new Block( 2000, 290,150,30)
+    block10 = new Block(2100, 285, 170,45 )
+    block11 = new Block(2200, 275, 170, 55)
+    block12 = new Block(2250, 150, 50, 30,)
+    block13 = new Block(2900, 270, 225, 50)
+    block14 = new Block(3000,290, 20,20)
+    block15 = new Block(3000,270, 20, 20)
+    block16 = new Block(3020,290, 20, 20)
+    block17 = new Block(3150,250, 65, 60)
+    block18 = new Block(3200,200, 45, 110)
     tutG = new Ground(window.innerWidth, 390);
     allEnemies.push(aBlock)
     allEnemies.push(a2Block)
@@ -337,6 +344,17 @@ const animation = () => {
     block7.theEnemies(block7.leftX, block7.topY, block7.width, block7.height);
     block8.theEnemies(block8.leftX, block8.topY, block8.width, block8.height);
     
+    block9.theEnemies(block9.leftX, block9.topY, block9.width, block9.height);
+    block10.theEnemies(block10.leftX, block10.topY, block10.width, block10.height);
+    block11.theEnemies(block11.leftX, block11.topY, block11.width, block11.height);
+    block12.theEnemies(block12.leftX, block12.topY, block12.width, block12.height);
+    block13.theEnemies(block13.leftX, block13.topY, block13.width, block13.height);
+    block14.theEnemies(block14.leftX, block14.topY, block14.width, block14.height);
+    block15.theEnemies(block15.leftX, block15.topY, block15.width, block15.height);
+    block16.theEnemies(block16.leftX, block16.topY, block16.width, block16.height);
+    block17.theEnemies(block17.leftX, block17.topY, block17.width, block17.height);
+    block18.theEnemies(block18.leftX, block18.topY, block18.width, block18.height);
+
     tutG.theGround(tutG.x, tutG.y);
 
 
@@ -345,9 +363,6 @@ const animation = () => {
 
     //first object
 
-    // else if (800 <= distanceCounter >= 1200) {
-    //     b2();
-    // }
 
     block1.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
     block2.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
@@ -357,6 +372,17 @@ const animation = () => {
     block6.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
     block7.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
     block8.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block9.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block10.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block11.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block12.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block13.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block14.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block15.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block16.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block17.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+    block18.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
+
 
 }
 
