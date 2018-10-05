@@ -11,7 +11,16 @@ canvas.width = 4000;
 canvas.height = window.innerHeight;
 
 //window.addEventListener("resize", resizer)
-
+let hexx ="#"
+const hex = ["1","2","3","4","5","6","7","8","9","0","A","B", "C", "D", "E", "F"]
+const rainbow = (arr) =>{
+    for(let r = 0; r < 6; r++){
+ let value = arr[Math.floor(Math.random() * arr.length)]
+    hexx += value
+}
+}
+rainbow(hex)
+ 
 let direction = {
     left: false,
     right: false,
@@ -27,7 +36,7 @@ let mapCollision = {
     bottomCol: false
 }
 
-
+let timer = 0;
 let jump = false;
 let first;
 let aBlock;
@@ -88,7 +97,7 @@ class Block {
     }
     moving(groundy, Pspeed, Pjump, PTopY, PBottomY) {
 
-        console.log(distanceCounter)
+       // console.log(distanceCounter)
 
 
 
@@ -126,7 +135,7 @@ class Block {
             //trans -= this.dx;
             this.leftX -= Pspeed;
             this.rightX -= Pspeed;
-            distanceCounter += Pspeed / 3;
+            distanceCounter += Pspeed / 18;
             //console.log(this.rightX)
             // c.translate(trans, 0);
         }
@@ -136,7 +145,7 @@ class Block {
         }
 
         else if (direction.left == true && mapCollision.topCol === true && mapCollision.leftCol === false) {
-            distanceCounter -= Pspeed / 3;
+            distanceCounter -= Pspeed / 18;
             mapCollision.rightCol = false;
             this.leftX += Pspeed;
             this.rightX += Pspeed;
@@ -178,6 +187,10 @@ class Block {
     theEnemies(abx, aby, abw, abh) {
         c.fillStyle = '#FF0000';
         c.fillRect(abx, aby, abw, abh);
+    }
+    coins(abx, aby){
+        c.beginPath();
+        c.arc(abx, aby,5,0, 2* Math.PI)
     }
 }
 
@@ -308,24 +321,24 @@ const game = {
 }
 const init = () => {
     first = new ThePlayer(75, 310, 40, 80, 5, 7, 3, 3, false);
-    block1 = new Block(310, 350, 70, 70)
-    block2 = new Block(625, 360, 70, 70)
-    block3 = new Block(750, 370, 40, 90)
-    block4 = new Block(1000, 380, 20, 50)
-    block5 = new Block(1250, 390, 50, 50)
-    block6 = new Block(1425, 400, 30, 75)
-    block7 = new Block(1075, 410,120, 25)
-    block8 = new Block(1800, 420, 225, 35)
-    block9 = new Block(2000, 430,150,30)
-    block10 = new Block(2100, 440, 170,45 )
-    block11 = new Block(2200, 450, 170, 55)
-    block12 = new Block(2250, 460, 50, 30,)
-    block13 = new Block(2900, 470, 225, 50)
-    block14 = new Block(3000, 480, 20,20)
-    block15 = new Block(3000, 490, 20, 20)
-    block16 = new Block(3020, 500, 20, 20)
-    block17 = new Block(3450, 510, 65, 60)
-    block18 = new Block(3500, 520, 45, 110)
+    block1 = new Block(310, 320, 70, 70)
+    block2 = new Block(625, 320, 70, 70)
+    block3 = new Block(750, 300, 40, 90)
+    block4 = new Block(1000, 340, 20, 50)
+    block5 = new Block(1250, 340, 50, 50)
+    block6 = new Block(1425, 315, 30, 75)
+    block7 = new Block(1075, 365,120, 25)
+    block8 = new Block(1800, 355, 215, 35)
+    block9 = new Block(2500, 360,150,30)
+    block10 = new Block(2600, 345, 170,45 )
+    block11 = new Block(2700, 335, 170, 55)
+    block12 = new Block(2750, 360, 50, 30,)
+    block13 = new Block(3000, 340, 225, 50)
+    block14 = new Block(3500, 370, 20,20)
+    block15 = new Block(3500, 350, 20, 20)
+    block16 = new Block(3520, 370, 20, 20)
+    block17 = new Block(3950, 330, 65, 60)
+    block18 = new Block(4000, 280, 45, 110)
     tutG = new Ground(window.innerWidth, 390);
     allEnemies.push(aBlock)
     allEnemies.push(a2Block)
@@ -333,6 +346,7 @@ const init = () => {
 }
 const animation = () => {
     requestAnimationFrame(animation);
+    console.log(distanceCounter)
     c.clearRect(0, 0, innerWidth, innerHeight);
     first.thePlayer(first.leftX, first.topY, first.width, first.height);
     block1.theEnemies(block1.leftX, block1.topY, block1.width, block1.height);
@@ -360,10 +374,134 @@ const animation = () => {
 
     // ground
     game.colDetObjTop(first.leftX, first.rightX, 0, tutG.x, first.bottomY, tutG.y)
+//block 1
+    if (distanceCounter < 500) {
+        game.colDetObjTop(first.leftX, first.rightX, block1.leftX, block1.rightX, first.bottomY, block1.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block1.topY, block1.bottomY, block1.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block1.topY, block1.bottomY, block1.rightX);
+    }
+//block 2
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block2.leftX, block2.rightX, first.bottomY, block2.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block2.topY, block2.bottomY, block2.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block2.topY, block2.bottomY, block2.rightX);
+    }
+//block 3
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block3.leftX, block3.rightX, first.bottomY, block3.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block3.topY, block3.bottomY, block3.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block3.topY, block3.bottomY, block3.rightX);
+    } 
+//block 4
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block4.leftX, block4.rightX, first.bottomY, block4.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block4.topY, block4.bottomY, block4.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block4.topY, block4.bottomY, block4.rightX);
+    } 
+//block 5 
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block5.leftX, block5.rightX, first.bottom, block5.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block5.topY, block5.bottomY, block5.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block5.topY, block5.bottomY, block5.rightX);
+    }
+//block 6 
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block6.leftX, block6.rightX, first.bottomY, block6.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block6.topY, block6.bottomY, block6.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block6.topY, block6.bottomY, block6.rightX);
+    } 
+//block 7
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block7.leftX, block7.rightX, first.bottomY, block7.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block7.topY, block7.bottomY, block7.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block7.topY, block7.bottomY, block7.rightX);
+    }
+//block 8
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block8.leftX, block8.rightX, first.bottomY, block8.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block8.topY, block8.bottomY, block8.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block8.topY, block8.bottomY, block8.rightX);
+    }
+//block 9  
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block9.leftX, block9.rightX, first.bottomY, block9.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block9.topY, block9.bottomY, block9.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block9.topY, block9.bottomY, block9.rightX);
+    }
+//block 10
+else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block10.leftX, block10.rightX, first.bottomY, block10.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block10.topY, block10.bottomY, block10.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block10.topY, block10.bottomY, block10.rightX);
+    } 
+// block 11
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block11.leftX, block11.rightX, first.bottomY, block11.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block11.topY, block11.bottomY, block11.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block11.topY, block11.bottomY, block11.rightX);
+    } 
+// block 12
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block12.leftX, block12.rightX, first.bottomY, block12.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block12.topY, block12.bottomY, block12.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block12.topY, block12.bottomY, block12.rightX);
+    } 
+// block 13  
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block13.leftX, block13.rightX, first.bottomY, block13.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block13.topY, block13.bottomY, block13.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block13.topY, block13.bottomY, block13.rightX);
+    }
+// block 14
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block14.leftX, block14.rightX, first.bottomY, block14.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block14.topY, block14.bottomY, block14.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block14.topY, block14.bottomY, block14.rightX);
+    }
+// block 15
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block15.leftX, block15.rightX, first.bottomY, block15.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block15.topY, block15.bottomY, block15.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block15.topY, block15.bottomY, block15.rightX);
+    }
+//block 16
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block16.leftX, block16.rightX, first.bottomY, block16.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block16.topY, block16.bottomY, block16.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block16.topY, block16.bottomY, block16.rightX);
+    } 
+//block 17
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block17.leftX, block17.rightX, first.bottomY, block17.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block17.topY, block17.bottomY, block17.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block17.topY, block17.bottomY, block17.rightX);
+    }
+//block 18
+    else if (distanceCounter >= 500 && distanceCounter <= 700) {
+        //console.log("activated")
+        game.colDetObjTop(first.leftX, first.rightX, block18.leftX, block18.rightX, first.bottomY, block18.topY)
+        game.colDetObjRight(first.topY, first.bottomY, first.rightX, block18.topY, block18.bottomY, block18.leftX)
+        game.colDetObjLeft(first.topY, first.bottomY, first.leftX, block18.topY, block18.bottomY, block18.rightX);
+    }
+    
 
-    //first object
-
-
+    //every object on the map
     block1.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
     block2.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
     block3.moving(tutG.y, first.dx, first.dy, first.topY, first.bottomY);
@@ -385,7 +523,7 @@ const animation = () => {
 
 
 }
-
+//keys
 $(document).on("keydown", (event) => {
     if (event.keyCode == 39) {
         preventDefault()
