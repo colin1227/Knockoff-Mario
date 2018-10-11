@@ -3,3 +3,18 @@ html, body {
 	width:  100%;
 	margin: 0px;
 }
+
+.hide {
+ display: none;
+
+}
+#mario{
+	width: 75%;
+	height: 75%;
+
+}
+#start{
+	
+	display: block;
+	margin: 0px auto;
+}
