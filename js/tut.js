@@ -99,10 +99,9 @@ const createBoard = () =>{
 $Timer = $("<h1>Timer 0s</h1>")
 $("body").append($Timer);
 
-
 c = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight - 100;
+canvas.width = 1000;
+canvas.height = 1000;
 }
 
 
@@ -554,6 +553,7 @@ class ThePlayer {
 		}
 		// block 3 collision
 		else if (block3.leftX <= 190 && block3.rightX >= 0){
+			console.log("left: ", block3.leftX,"   right: ", block3.rightX)
 			game.colDetObjTop(first.leftX, first.rightX, block3.leftX, block3.rightX, first.bottomY, block3.topY)
 			game.colDetObjRight(first.topY, first.bottomY, first.leftX, block3.topY, block3.bottomY, block3.rightX)
 			game.colDetObjLeft(first.topY, first.bottomY, first.rightX, block3.topY, block3.bottomY, block3.leftX);
@@ -741,7 +741,7 @@ fireCounter = 0;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let $StartGame = $("#start")
 $StartGame.click(() =>{
-	$('html').html(createBoard());
+	$('body').append(createBoard());
 	if(player2 === false){
 
 		c.clearRect(0, 0, innerWidth, innerHeight)
